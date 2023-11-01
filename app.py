@@ -1,8 +1,8 @@
 import os
 import datetime
+import tempfile
 
 import assemblyai as aai
-# import tempfile
 # import shutil
 
 # API's de texto
@@ -64,18 +64,24 @@ def call():
             fecha = ahora.strftime("%Y_%B_%d_%A_%H_%M_%S") # Año, Mes, Día, Día de la semana, Hora
             dmy = ahora.strftime("%d/%m/%Y")
             hms = ahora.strftime("%H_%M_%S")
+
+            # Temp file
+            with tempfile.NamedTemporaryFile(delete=False, suffix=".mp3") as temp_audio:
+                filepath = temp_audio.name
+                audio_file.save(filepath)
+
             
             # Guardar los archivos
-            filename = secure_filename(audio_file.filename)
-            filepath = os.path.join("audios", fecha + '.mp3')
-            audio_file.save(filepath)
-
-            # Borrar el archivo
-            os.remove(filepath)
+            # filename = secure_filename(audio_file.filename)
+            # filepath = os.path.join("audios", fecha + '.mp3')
+            # audio_file.save(filepath)
 
             transcript = transcriber.transcribe(filepath)
             trans = transcript.text
             lowertrans = trans.lower()
+
+            # Borrar el archivo
+            os.remove(filepath)
 
 
             # Insertar las relaciones en el SQL de calls en su respectiva fila (EN LA COLUMNA PELIGRO)
