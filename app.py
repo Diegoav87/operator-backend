@@ -67,21 +67,19 @@ def call():
 
             # Temp file
             with tempfile.NamedTemporaryFile(delete=False, suffix=".mp3") as temp_audio:
-                filepath = temp_audio.name
+                filepath = os.path.join("audios", fecha + '.mp3')
                 audio_file.save(filepath)
 
-            
-            # Guardar los archivos
-            # filename = secure_filename(audio_file.filename)
-            # filepath = os.path.join("audios", fecha + '.mp3')
-            # audio_file.save(filepath)
+                # Guardar los archivos
+                filename = secure_filename(audio_file.filename)
+                # audio_file.save(filepath)
 
-            transcript = transcriber.transcribe(filepath)
-            trans = transcript.text
-            lowertrans = trans.lower()
+                transcript = transcriber.transcribe(filepath)
+                trans = transcript.text
+                lowertrans = trans.lower()
 
-            # Borrar el archivo
-            os.remove(filepath)
+                # Borrar el archivo
+                # os.remove(filepath)
 
 
             # Insertar las relaciones en el SQL de calls en su respectiva fila (EN LA COLUMNA PELIGRO)
@@ -216,7 +214,7 @@ def overview():
 
 # Launching
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
+    port = int(os.environ.get('PORT', 5001))
     app.run(host='0.0.0.0', port=port, debug=True, use_reloader=True)
 
  
